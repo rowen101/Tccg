@@ -1,0 +1,122 @@
+﻿@model tccgv2.Models.clsClientSetup
+
+@{
+    ViewBag.Title = "add-new-client";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .validation-summary-errors {
+        color: red;
+    }
+</style>
+<p class="lead">New Client</p>
+
+@using (Html.BeginForm("add-new-client", "MasterFile", FormMethod.Post, new { @class = "form-horizontal well" }))
+{
+
+
+    @Html.ValidationSummary(false)
+    <div class="control-group">
+        @Html.LabelFor(model => model.CLIENT_NAME, new { @class = "control-label" })
+
+        <div class="controls">
+            @Html.EditorFor(model => model.CLIENT_NAME)
+        </div>
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(model => model.CLIENT_ADDRESS, new { @class = "control-label" })
+
+        <div class="controls">
+            @Html.EditorFor(model => model.CLIENT_ADDRESS)
+        </div>
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(model => model.CLIENT_TEL, new { @class = "control-label" })
+
+        <div class="controls">
+            @Html.EditorFor(model => model.CLIENT_TEL)
+        </div>
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(model => model.CLIENT_FAX, new { @class = "control-label" })
+
+        <div class="controls">
+            @Html.EditorFor(model => model.CLIENT_FAX)
+        </div>
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(model => model.CLIENT_MOBILE, new { @class = "control-label" })
+
+        <div class="controls">
+            @Html.EditorFor(model => model.CLIENT_MOBILE)
+        </div>
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(model => model.CLIENT_EMAIL, new { @class = "control-label" })
+
+        <div class="controls">
+            @Html.EditorFor(model => model.CLIENT_EMAIL)
+        </div>
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(model => model.INQUIRY_DETAILS, new { @class = "control-label" })
+
+        <div class="controls">
+            @Html.EditorFor(model => model.INQUIRY_DETAILS)
+        </div>
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(model => model.INQUIRY_DATE, new { @class = "control-label" })
+
+        <div class="controls">
+            @Html.EditorFor(model => model.INQUIRY_DATE)
+        </div>
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(model => model.DISPOSITION, new { @class = "control-label" })
+
+        <div class="controls">
+            @Html.EditorFor(model => model.DISPOSITION)
+        </div>
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(model => model.REMARKS, new { @class = "control-label" })
+
+        <div class="controls">
+            @Html.EditorFor(model => model.REMARKS)
+        </div>
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(model => model.ISCUSTOMER, new { @class = "control-label" })
+
+        <div class="controls">
+            @Html.EditorFor(model => model.ISCUSTOMER)
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+
+            <p>
+                <input type="submit" class="btn btn-primary" value="Create" />
+                @Html.ActionLink("Back to List", "client-inquiry")</p>
+        </div>
+    </div>
+}
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

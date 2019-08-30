@@ -1,0 +1,116 @@
+﻿@model tccgv2.Models.clsClientSetup
+
+@{
+    ViewBag.Title = "create-new-client-inquiry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>create-new-client-inquiry</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>clsClientSetup</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CLIENT_NAME)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CLIENT_NAME)
+            @Html.ValidationMessageFor(model => model.CLIENT_NAME)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CLIENT_ADDRESS)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CLIENT_ADDRESS)
+            @Html.ValidationMessageFor(model => model.CLIENT_ADDRESS)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CLIENT_TEL)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CLIENT_TEL)
+            @Html.ValidationMessageFor(model => model.CLIENT_TEL)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CLIENT_FAX)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CLIENT_FAX)
+            @Html.ValidationMessageFor(model => model.CLIENT_FAX)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CLIENT_MOBILE)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CLIENT_MOBILE)
+            @Html.ValidationMessageFor(model => model.CLIENT_MOBILE)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CLIENT_EMAIL)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CLIENT_EMAIL)
+            @Html.ValidationMessageFor(model => model.CLIENT_EMAIL)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.INQUIRY_DETAILS)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.INQUIRY_DETAILS)
+            @Html.ValidationMessageFor(model => model.INQUIRY_DETAILS)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.INQUIRY_DATE)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.INQUIRY_DATE)
+            @Html.ValidationMessageFor(model => model.INQUIRY_DATE)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DISPOSITION)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DISPOSITION)
+            @Html.ValidationMessageFor(model => model.DISPOSITION)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.REMARKS)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.REMARKS)
+            @Html.ValidationMessageFor(model => model.REMARKS)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ISCUSTOMER)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ISCUSTOMER)
+            @Html.ValidationMessageFor(model => model.ISCUSTOMER)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

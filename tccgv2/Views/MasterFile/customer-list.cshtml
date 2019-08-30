@@ -1,0 +1,76 @@
+﻿@model PagedList.IPagedList<tccgv2.Models.clsCustomerList>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "TCCG | Customer List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="lead">Customer List</p>
+
+@*<p>
+    @Html.ActionLink("Create Client", "create-new-user")
+</p>*@
+<div class="text-right">
+    <div class="input-append">
+        <input class="span2" id="appendedInputButtons" type="text">
+        <button class="btn" type="button">Search</button>
+    </div>
+</div>
+<table class="table table-hover table-condensed">
+    <tr>
+        <th></th>
+        <th>
+            Name
+        </th>
+        <th>
+            Address
+        </th>
+        <th>
+           Tel #
+       
+        <th>
+          Mobile
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+           Inquiry Date
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+         <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mobile)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.inquirydate)
+        </td>
+       
+    </tr>
+}
+
+</table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("customer-list",
+    new { page, systemid = ViewBag.currentsystem }))

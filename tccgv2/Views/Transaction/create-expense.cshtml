@@ -1,0 +1,315 @@
+﻿@{
+    ViewBag.Title = "TCCG | Create Expense";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="lead">Create Expense Record</p>
+
+<table>
+    <tr>
+        <td>Customer:
+        </td>
+        <td>
+            <select id="customer"></select>
+        </td>
+    </tr>
+    <tr>
+        <td>Invoice#:
+        </td>
+        <td>
+            <select id="invoice"></select>
+        </td>
+    </tr>
+</table>
+
+<p>
+    <input type="button" class="btn btn-primary" value="Add Expense" data-toggle="modal" data-target="#myModal"/>
+    <input type="button" class="btn btn-danger" value="Delete" onclick="deleteRow('tblitem');" />
+</p>
+
+<table class="table table-hover table-condensed" id="tblitem">
+    <tr>
+        <th></th>
+        <th>Transaction Details</th>
+        <th>Transaction Date</th>
+        <th>Amount</th>
+    </tr>
+</table>
+<div style="text-align: right;">
+    <p> Total Amount <span id="lbltotalamt">0</span></p>
+</div>
+
+<div>
+    <p class="text-center">
+        <input type="button" class="btn btn-primary" onclick="save();" value="Save" />
+        @Html.ActionLink("Back to List", "expense-management")
+    </p>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Expense Details</h4>
+            </div>
+            <div class="modal-body">
+            <table>
+                <tr>
+                    <td>Transaction Details:</td>
+                    <td><textarea id="trans_dtl"></textarea></td>
+                </tr>
+                 <tr>
+                    <td>Transaction Date</td>
+                    <td><input type="text" id="trans_dte" value="@DateTime.Now.ToShortDateString()" /></td>
+                </tr>
+                <tr>
+                    <td>Amount:</td>
+                    <td><input type="number" value="0" id="amt"/></td>
+                </tr>
+            </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-additem" onclick="additem();" class="btn btn-primary">Add</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    this.get_customer();
+
+    function expensedtl() {
+
+        var myTr = [];
+        var istd = false;
+        var trans_des;
+        var trans_dte;
+        var trans_amt;
+
+
+        $('#tblitem tr').each(function () {
+            var col = 0;
+            if (istd == true) {
+                var col = 0;
+                $(this).find('td').each(function () {
+                    //do your stvauff, you can use $(this) to get current cell
+                    switch (col) {
+                        case 1:
+                            trans_des = $(this).text();
+                            break;
+                        case 2:
+                            trans_dte = $(this).text();
+                            break;
+                        case 3:
+                            trans_amt = $(this).text();
+                            break;
+
+                    }
+                    col += 1;
+
+                })
+
+
+                myTr.push({
+                    trans_des: trans_des,
+                    trans_dte: trans_dte,
+                    trans_amt: trans_amt
+                });
+
+
+
+
+            }
+
+            istd = true;
+        });
+
+        return myTr;
+
+    }
+
+    function save()
+    {
+        var custcode = $('#customer').val();
+        var invoicenum = $('#invoice').val();
+        var total_amt = $('#lbltotalamt').text();
+        var jsonData = JSON.stringify({ customercode: custcode, invoice_num: invoicenum, total_amt: total_amt, expensedtl: expensedtl() }, null, 2);
+
+      
+
+        $.ajax({
+            url: '@Url.Content("~/JsonResult/save-expense/")',
+             type: 'POST',
+             data: jsonData,
+             datatype: 'json',
+             contentType: 'application/json; charset=utf-8',
+             success: function (data) {
+                 if (data.result == true) {
+                     alert('Save Complete...');
+                    
+                 }
+                 else {
+                     alert(data.err.toString());
+                 }
+
+             },
+             error: function (request, status, err) {
+                 alert(status);
+                 alert(err);
+             }
+         });
+    }
+
+    function clearme()
+    {
+        $('#trans_dtl').val('');
+        $('#trans_dte').val('');
+        $('#amt').val('');
+    }
+
+    function set_total() {
+        var istd = false;
+        var totalamt = 0;
+       
+        $('#tblitem tr').each(function () {
+            var col = 0;
+            if (istd == true) {
+                var col = 0;
+                $(this).find('td').each(function () {
+                    //do your stuff, you can use $(this) to get current cell
+                    switch (col) {
+                        case 3:
+
+                            totalamt += parseFloat($(this).text());
+                            break;
+                   
+                    }
+                    col += 1;
+
+                })
+            }
+            istd = true;
+        });
+
+        $('#lbltotalamt').text(totalamt);
+
+    }
+
+
+    function isNumber(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+    function deleteRow(tableID) {
+        try {
+            var table = document.getElementById(tableID);
+            var rowCount = table.rows.length;
+
+            for (var i = 0; i < rowCount; i++) {
+                var row = table.rows[i];
+                var chkbox = row.cells[0].childNodes[0];
+                if (null != chkbox && true == chkbox.checked) {
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+
+
+            }
+
+            set_total();
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+    function additem()
+    {
+        try{
+        
+            var dtl = $('#trans_dtl').val();
+            var dte = $('#trans_dte').val();
+            var amt = $('#amt').val();
+
+            $('#tblitem').append('<tr><td><INPUT type="checkbox" name="chk"/></td><td>' + dtl + '</td><td>' + dte + '</td><td>' + amt + '</td></tr>');
+            clearme();
+            set_total();
+        }
+        catch (err)
+        {
+            alert(err.message);
+        }
+    }
+
+    function get_customer() {
+        try {
+            $('#customer').empty();
+            $.ajax({
+                url: '@Url.Content("~/JsonResult/get-customer-invoice/")',
+                type: 'POST',
+                data: null,
+                datatype: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.result == true) {
+
+                        $.each(data.customer, function (idx, obj) {
+
+                            $('#customer').append('<option value=' + obj.valuemember + '>' + obj.displayvalue + '</option>');
+
+                        });
+
+                    }
+                    else {
+                        alert(data.err.toString());
+                    }
+
+                },
+                error: function (request, status, err) {
+                    alert(status);
+                    alert(err);
+                }
+            });
+        }
+        catch (err) {
+            alert(err.message);
+        }
+    }
+
+
+    $('#customer').change(function () {
+        var customer = this.value;
+        var jsonData = JSON.stringify({ customercde: customer }, null, 2);
+
+        $('#invoice').empty();
+        $.ajax({
+            url: '@Url.Content("~/JsonResult/get-expense-invoice/")',
+            type: 'POST',
+            data: jsonData,
+            datatype: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.result == true) {
+
+                    $.each(data.invoicenum, function (idx, obj) {
+
+                        $('#invoice').append('<option value=' + obj.valuemember + '>' + obj.displayvalue + '</option>');
+
+                    });
+                }
+                else {
+                    alert(data.err.toString());
+                }
+
+            },
+            error: function (request, status, err) {
+                alert(status);
+                alert(err);
+            }
+        });
+
+    });
+</script>

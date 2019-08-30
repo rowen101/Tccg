@@ -1,0 +1,231 @@
+﻿@model tccgv2.Models.packinglist
+@{
+    ViewBag.Title = "TCCG | Packing List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="lead">Create Packing List</p>
+
+<fieldset>
+
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.pl_num)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(model => model.pl_num, new { @readonly = "readonly" })
+        @Html.ValidationMessageFor(model => model.pl_num)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.pl_date)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.pl_date)
+        @Html.ValidationMessageFor(model => model.pl_date)
+    </div>
+
+    <div class="editor-label">
+        <label>Invoice #</label>
+    </div>
+    <div class="editor-field">
+        <input type="text" id="txtinvoice" />
+    </div>
+
+
+    <p>
+        <input type="button" id="btndetails" value="Get Details" class="btn btn-primary" />
+
+    </p>
+</fieldset>
+<div class="span12">
+    <table class="table table-hover table-condensed" id="tbl_item">
+        <tr>
+            <th>Quantity</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>VIN / ENGINE SERIAL </th>
+            <th>Net Weigth</th>
+            <th style="display:none;"></th>
+        </tr>
+    </table>
+    <hr />
+    <p class="text-right">Total Amount:<span id="lbltotal">0</span></p>
+</div>
+
+<div class="span12">
+    <p class="text-center">
+        <input type="button" class="btn btn-primary" id="btnsave" value="Save" />
+        @Html.ActionLink("Back to List", "packing-list")
+    </p>
+</div>
+<script>
+
+    function numberWithCommas(x) {
+        var parts = x.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+    }
+
+    function GetDetails()
+    {
+        var myTr = [];
+        var istd = false;
+        var itmcde;
+        var kg = 0;
+        try{
+        
+            $('#tbl_item tr').each(function () {
+                var col = 0;
+                if (istd == true) {
+                    var col = 0;
+                    $(this).find('td').each(function () {
+                        //do your stuff, you can use $(this) to get current cell
+                        switch (col) {
+                       
+                            case 4:
+                                kg = $(this).find('input[type="text"]').val();
+                                break;
+                            case 5:
+                                itemcde = $(this).text();
+                                break;
+                          
+                        }
+                        col += 1;
+
+                    })
+                    
+                        myTr.push({
+                            itmcde: itemcde,
+                            kg: kg
+                        });
+                    
+                }
+
+                istd = true;
+            });
+            return myTr;
+        }
+        catch (err)
+        {
+            alert('GetDetails:' + err.message);
+        }
+
+
+    }
+    
+    function set_total() {
+        try {
+            var istd = false;
+            var newamt = 0;
+            var total_converted = 0;
+            $('#tbl_item tr').each(function () {
+                var col = 0;
+                if (istd == true) {
+                    var col = 0;
+                    $(this).find('td').each(function () {
+                        //do your stuff, you can use $(this) to get current cell
+                        switch (col) {
+                            case 4:
+                                newamt = $(this).find('input[type="text"]').val();
+                                newamt = newamt.toString().replace(',', '');
+                                total_converted += parseFloat(newamt);
+                                break;
+
+
+
+                        }
+                        col += 1;
+
+                    })
+                }
+                istd = true;
+            });
+
+
+            $('#lbltotal').text(numberWithCommas(total_converted));
+        }
+        catch (err) {
+            alert(err.message);
+        }
+    }
+
+    $('#btndetails').click(function () {
+        try {           
+            var invoice_num = $('#txtinvoice').val();
+
+            var jsonData = JSON.stringify({ invoice_num: invoice_num }, null, 2);
+            $.ajax({
+                url: '@Url.Content("~/JsonResult/pl-invoice-dtl/")',
+                   type: 'POST',
+                   data: jsonData,
+                   datatype: 'json',
+                   contentType: 'application/json; charset=utf-8',
+                   success: function (data) {
+                       if (data.result == true) {
+
+                           $('#tbl_item').empty();
+                           $('#tbl_item').append(' <tr><th>Quantity</th><th>Make</th><th>Model</th><th>VIN / ENGINESERIAL </th><th>Net Weigth</th>  <th style="display:none;"></th></tr>');
+
+                           $.each(data.pl, function (ii, obj) {
+                               $('#tbl_item').append(' <tr><td>' + obj.qty + '</td><td>' + obj.make + '</td><td>' + obj.model + '</td><td>' + obj.vin + '</td><td><input type="text" value="0" onkeydown="set_total()" onkeyup="set_total()"/></td><td style="display:none;">' + obj.itmcode + '</td></tr>');
+                           });
+                        
+                       }
+                       else {
+                           alert(data.err.toString());
+                       }
+                   },
+                   error: function (request, status, err) {
+                       alert(status);
+                       alert(err);
+                   }
+               });
+
+
+        }
+        catch (err) {
+            alert(err.message);
+        }
+
+    });
+
+    $('#btnsave').click(function () {
+
+        try{
+            var pl_num = $('#pl_num').val();
+            var pl_date = $('#pl_date').val();
+            var invoice_num = $('#txtinvoice').val();
+            var gross = $('#lbltotal').text().replace(',','');
+
+            var jsonData = JSON.stringify({ pl_num: pl_num, pl_date: pl_date, invoice_num: invoice_num, gross: gross, dtl: GetDetails() }, null, 2);
+
+            $.ajax({
+                url: '@Url.Content("~/JsonResult/pl-save/")',
+                 type: 'POST',
+                 data: jsonData,
+                 datatype: 'json',
+                 contentType: 'application/json; charset=utf-8',
+                 success: function (data) {
+                     if (data.result == true) {
+
+                         alert('Save Complete');
+                     }
+                     else {
+                         alert(data.err.toString());
+                     }
+                 },
+                 error: function (request, status, err) {
+                     alert(status);
+                     alert(err);
+                 }
+             });
+
+
+        }
+        catch (err)
+        {
+            alert(err.message);
+        }
+    });
+</script>

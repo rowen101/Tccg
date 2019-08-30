@@ -1,0 +1,150 @@
+﻿@model tccgv2.Models.clsRptPackinglist
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <title>TCCG | PACKING LIST REPORT</title>
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/assets/css/packinglist.css")" media="screen" />
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/assets/css/packinglist.css")" media="print" />
+</head>
+<body>
+    <div id="main">
+        <div id="header-box">
+            <div class="box">
+                <div class="logo">
+                    <img width="200" height="86" src="@Url.Content("~/Images/tccg.png")"/></div>
+            </div>
+            <div class="box" style="text-align: right;">
+                <h2>Packing List</h2>
+                <b />
+                <div style="width: 150px; font-size: 10px; float: right;">
+                    PACKING LIST#: @Html.DisplayFor(mod => Model.plnum)
+                    DATE: @Html.DisplayFor(mod => Model.pldte)
+                </div>
+
+            </div>
+            <div class="boxhead">
+                <div style="width: 120px; font-size: 11px; float: left;">
+                    6063 Oliva Avenue
+					Lakewood, CA 90712
+					(562) 507-3324
+
+                </div>
+            </div>
+
+            <div class="boxhead">
+                <div style="whidth: 50px; font-size: 12px; float: left;">
+                    TO:&nbsp;
+                </div>
+                <div style="width: 300px; font-size: 12px; float: left;">
+                   
+                    @Html.Raw(Model.customername)
+
+                </div>
+            </div>
+        </div>
+        <div id="content-body">
+            <div class="con-box">
+                <table class="MsoNormalTable" border="0" cellspacing="0" cellpadding="0" width="672"
+                    style='width: 7.0in; border-collapse: collapse; mso-padding-alt: 2.9pt 5.75pt 2.9pt 5.75pt'>
+
+                    <tr>
+                        <th class="title-th">PL NUMBER
+                        </th>
+                        <th class="title-th">CUSTOMER #
+                        </th>
+                        <th class="title-th">SHIP
+                        </th>
+                        <th class="title-th">VIA
+                        </th>
+                    </tr>
+                    <tr class="body-tr">
+                        <td>
+                            @Html.DisplayFor(mod => Model.plnum)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(mod => Model.customer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(mod => Model.ship)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(mod => Model.via)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="con-box">
+                <table class="MsoNormalTable" border="0" cellspacing="0" cellpadding="0" width="672"
+                    style='width: 7.0in; border-collapse: collapse; mso-padding-alt: 2.9pt 5.75pt 2.9pt 5.75pt'>
+                    <tr>
+
+                        <td class="title-th">QTY
+                        </td>
+                        <td class="title-th" width="365">MAKE
+                        </td>
+                        <td class="title-th">MODEL
+                        </td>
+                        <td class="title-th">VIN / SERIAL #
+                        </td>
+                        <td class="title-th">NET WEIGHT
+                        </td>
+                    </tr>
+                    @foreach (var item in Model.pklist)
+                    {
+                        <tr class="body-tr">
+                            <td>
+                                @Html.DisplayFor(mod => item.qty)
+                            </td>
+                            <td width="365" style="text-align: left;">
+                                @Html.DisplayFor(mod => item.make)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(mod => item.model)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(mod => item.vin)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(mod => item.net_weight) kg
+                            </td>
+                        </tr>
+                    }
+
+                    <tr>
+                        <td width="107" style='text-align: right; width: 80.6pt; border-top: solid #3B5E91 1.0pt; border-left: none; border-bottom: none; border-right: solid #3B5E91 1.0pt; mso-border-top-alt: solid #3B5E91 .5pt; mso-border-right-alt: solid #3B5E91 .5pt; padding: 2.15pt 5.75pt 2.15pt 5.75pt; height: .2in'
+                            colspan="4">
+                            <p class="Labels"><span style='font-size: 11.0pt'>TOTAL GROSS WEIGHT<o:p></o:p></span></p>
+                        </td>
+
+                        <td width="120" style='width: 1.25in; border: solid #3B5E91 1.0pt; border-left: none; mso-border-left-alt: solid #3B5E91 .5pt; mso-border-alt: solid #3B5E91 .5pt; padding: 2.15pt .15in 2.15pt .15in; height: .2in'>
+                            @Html.DisplayFor(mod => Model.gross_weight) kg
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <span style='font-size: 11.0pt; line-height: 110%'>
+            <p style="font-style: italic; font-family: Trebuchet MS; font-size: 12px;">PREPARED BY:</p>
+            <br />
+            <img src="@Url.Content("~/Images/image002.png")"/>
+            <br />
+            NESTOR DEJORAS<br />
+            <p style="font-family: Trebuchet MS; font-size: 12px;">TCCG-USA</p>
+        </span>
+
+        <div id="footer">
+            <span>THANK YOU FOR YOUR BUSINESS!</span>
+        </div>
+    </div>
+
+</body>
+
+</html>

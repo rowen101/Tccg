@@ -1,0 +1,41 @@
+﻿@model PagedList.IPagedList<tccgv2.Models.packinglist>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "TCCG | PACKING LIST";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="lead">Packing List</p>
+
+<p>
+    @Html.ActionLink("Create Packing List", "cr-pl")
+</p>
+<div class="text-right">
+    <div class="input-append">
+        <input class="span2" id="appendedInputButtons" type="text">
+        <button class="btn" type="button">Search</button>
+    </div>
+</div>
+<table class="table table-hover table-condensed">
+    <tr>
+        <th></th>
+        <th>Packing List #</th>
+        <th>Invoice #</th>
+        <th>Date</th>
+        <th>Gross Weigth</th>
+    </tr>
+    @foreach (var item in Model)
+    { 
+        <tr>
+            <td>@Html.ActionLink("Modify", "md-pl", new { id= item.pl_num }) | <a href="#">Remove</a> | @Html.ActionLink("Preview", "packing-list", "Preview", new { id=item.pl_num }, new { @target = "_blank" })</td>
+              <td>@Html.DisplayFor(mod=>item.pl_num)</td>
+              <td>@Html.DisplayFor(mod=>item.invoice_num)</td>
+              <td>@Html.DisplayFor(mod=>item.pl_date)</td>
+              <td>@Html.DisplayFor(mod=>item.gross)</td>
+        </tr>
+    }
+</table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, p => Url.Action("packing-list",
+    new { p, systemid = ViewBag.currentsystem }))

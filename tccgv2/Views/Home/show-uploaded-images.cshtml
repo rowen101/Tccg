@@ -1,0 +1,11 @@
+﻿@model IEnumerable<tccgv2.Models.clsImagelist>
+@{
+    ViewBag.Title = "show-uploaded-images";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>show-uploaded-images</h2>
+@foreach (var item in Model)
+{ 
+    <img src="@Url.Content(item.imgpath)" class="img-polaroid" style="width:140px; height:140px;">
+}

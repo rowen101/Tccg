@@ -1,0 +1,418 @@
+﻿@model tccgv2.Models.clsPOSetup
+
+@{
+    ViewBag.Title = "TCCG | Edit Purchase Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="alert" style="display:none;">
+    <button class="close" data-dismiss="alert" type="button">×</button>
+    <strong>Purchase Order has been save complete</strong> @Html.ActionLink("view list","purchase-order-list")
+    
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ponum)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.ponum, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.ponum)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.podate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.podate)
+            @Html.ValidationMessageFor(model => model.podate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.customer)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("customer", new SelectList(Model.customer, "valuemember", "displayvalue"), new { @class = "txtdropdown" })
+        </div>
+
+
+        <p>
+            <input type="button" value=" + Add Item" class="btn btn-primary" data-toggle="modal" data-target="#myModal" />
+            <input type="button" value="Delete" class="btn btn-danger" onclick="deleteRow('tbl_item');" />
+        </p>
+    </fieldset>
+   
+    
+    <table class="table table-hover table-condensed" id="tbl_item">
+        <tr>
+            <th></th>
+            <th>QUANTITY</th>
+            <th>MAKE</th>
+            <th>MODEL</th>
+            <th>VIN / ENGINESERIAL </th>
+            <th>BASE PRICE</th>
+            <th>ACTUAL PRICE</th>
+            <th>Selling AMOUNT</th>
+            <th>Converted AMOUNT</th>
+            <th>ESTIMATE PROFIT</th>
+        </tr>
+    </table>
+    
+    
+}
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Add Item</h4>
+            </div>
+            <div class="modal-body">
+                <p id="msgresult"></p>
+                <div class="editor-label">
+                    Quantity
+                </div>
+                <div class="editor-field">
+                    <input type="number" id="txtqty" />
+                </div>
+
+                <div class="editor-label">
+                    MAKE
+                </div>
+                <div class="editor-field">
+                    <textarea id="txtmake"></textarea>
+                </div>
+
+                <div class="editor-label">
+                    MODEL
+                </div>
+                <div class="editor-field">
+                    <textarea id="txtmodel"></textarea>
+                </div>
+
+                <div class="editor-label">
+                    VIN / ENGINESERIAL#
+                </div>
+                <div class="editor-field">
+                    <textarea id="txtvin_engine"></textarea>
+                </div>
+                <div class="editor-label">
+                    Base Price
+                </div>
+                <div class="editor-field">
+                    <input type="number" id="baseprice" />
+                </div>
+
+                <div class="editor-label">
+                    Selling Price
+                </div>
+                <div class="editor-field">
+                    <input type="number" id="sellingprice" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-additem" onclick="additem();" class="btn btn-primary">Add</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: right;">
+    <p>Total Base Amount <span id="tot_base">0</span> Total Converted Amount <span id="tot_converted">0</span></p>
+</div>
+
+<div>
+    <p class="text-center">
+        <input type="button" class="btn btn-primary" onclick="save();" value="Save" />
+        @Html.ActionLink("Back to List", "purchase-order-list")
+    </p>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+
+   
+
+    function set_total() {
+        var istd = false;
+        var total_baseprice = 0;
+        var total_converted = 0;
+        $('#tbl_item tr').each(function () {
+            var col = 0;
+            if (istd == true) {
+                var col = 0;
+                $(this).find('td').each(function () {
+                    //do your stuff, you can use $(this) to get current cell
+                    switch (col) {
+                        case 7:
+
+                            total_baseprice += parseFloat($(this).text());
+                            break;
+                        case 8:
+                            total_converted += parseFloat($(this).text());
+                            break;
+
+
+                    }
+                    col += 1;
+
+                })
+            }
+            istd = true;
+        });
+
+
+        $('#tot_base').text(total_baseprice);
+        $('#tot_converted').text(total_converted);
+    }
+
+    function podetails()
+    {
+
+        var myTr = [];
+        var istd = false;
+        var qty;
+        var make;
+        var model;
+        var vin_engine;
+        var baseprice;
+        var actualprice;
+        var sellingprice;
+        var convertedprice;
+        var istematedprofit;
+
+
+        $('#tbl_item tr').each(function () {
+            var col = 0;
+            if (istd == true) {
+                var col = 0;
+                $(this).find('td').each(function () {
+                    //do your stuff, you can use $(this) to get current cell
+                    switch (col) {
+                        case 1:
+                            qty = $(this).text();
+                            break;
+                        case 2:
+                            make = $(this).text();
+                            break;
+                        case 3:
+                            model = $(this).text();
+                            break;
+                        case 4:
+                            vin_engine = $(this).text();
+                            break;
+                        case 5:
+                            baseprice = $(this).text();
+                            break;
+                        case 6:
+                            actualprice = $(this).text();
+                            break;
+                        case 7:
+                            sellingprice = $(this).text();
+                            break;
+                        case 8:
+                            convertedprice = $(this).text();
+                            break;
+                        case 9:
+                            istematedprofit = $(this).text();
+                            break;
+
+                    }
+                    col += 1;
+
+                })
+
+
+                myTr.push({
+                    qty: qty,
+                    make: make,
+                    model: model,
+                    vin_engine: vin_engine,
+                    baseprice: baseprice,
+                    sellingprice: sellingprice,
+                    actulalamt: actualprice,
+                    convertedamt: convertedprice
+                });
+
+
+
+
+            }
+
+            istd = true;
+        });
+
+        return myTr;
+
+    }
+    
+   
+
+    function save() {
+
+
+
+        if ($('#customer').val() == '=Select=') {
+            alert('Please select customer');
+            return;
+        }
+
+        var jsondata = JSON.stringify({
+            ponum: $('#ponum').val(),
+            podate: $('#podate').val(),
+            customercode: $('#customer').val(),
+            baseprice: $('#tot_base').text(),
+            convertedamt: $('#tot_converted').text(),
+            podetail: podetails()
+        }, null, 2);
+
+
+
+        $.ajax({
+            url: '@Url.Content("~/JsonResult/save-po/")',
+            type: 'POST',
+            data: jsondata,
+            datatype: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.result == true) {
+
+                    $('.alert').show();
+                  }
+                  else {
+                      alert(data.err.toString());
+                  }
+              },
+            error: function (request, status, err) {
+                alert(status);
+                alert(err);
+            }
+        });
+
+          return false;
+      }
+
+      function deleteRow(tableID) {
+          try {
+              var table = document.getElementById(tableID);
+              var rowCount = table.rows.length;
+
+              for (var i = 0; i < rowCount; i++) {
+                  var row = table.rows[i];
+                  var chkbox = row.cells[0].childNodes[0];
+                  if (null != chkbox && true == chkbox.checked) {
+                      table.deleteRow(i);
+                      rowCount--;
+                      i--;
+                  }
+
+
+              }
+
+              set_total();
+          } catch (e) {
+              alert(e);
+          }
+      }
+
+      function isNumber(n) {
+          return !isNaN(parseFloat(n)) && isFinite(n);
+      }
+
+
+      function additem() {
+
+
+          var qty = $('#txtqty').val();
+          var make = $('#txtmake').val();
+          var model = $('#txtmodel').val();
+          var vin_engine = $('#txtvin_engine').val();
+          var baseprice = $('#baseprice').val();
+          var sellingprice = $('#sellingprice').val();
+          var haserror = false;
+          if (!isNumber(qty)) {
+              $('#txtqty').val('');
+              haserror = true;
+          }
+
+          if (!isNumber(baseprice)) {
+              $('#baseprice').val('');
+              haserror = true;
+          }
+          if (!isNumber(sellingprice)) {
+              $('#sellingprice').val('');
+              haserror = true;
+          }
+
+          if (haserror == true) {
+              alert('have error');
+              return;
+          }
+
+          var actualamt = parseFloat(baseprice) * parseFloat(qty);
+          var convertedamt = parseFloat(sellingprice) * parseFloat(qty);
+          var profit = convertedamt - actualamt;
+          $('#tbl_item').append('<tr><td><INPUT type="checkbox" name="chk"/></td><td>' + qty + '</td><td>' + make + ' </td><td>' + model + ' </td><td>' + vin_engine + ' </td><td>' + baseprice + '</td><td> ' + actualamt + '</td> <td>' + sellingprice + '</td><td>' + convertedamt + '</td><td>' + profit + '</td></tr>');
+
+
+          set_total();
+
+          $('#txtqty').val('');
+          $('#txtmake').val('');
+          $('#txtmodel').val('');
+          $('#txtvin_engine').val('');
+          $('#baseprice').val('');
+          $('#sellingprice').val('');
+      }
+
+</script>
+<script src="@Url.Content("~/assets/js/jquery-1.10.2.js")"></script>
+<script>
+    this.get_details();
+    function get_details() {
+
+
+        var jsondata = JSON.stringify({ ponum: $('#ponum').val() }, null, 2);
+
+        $.ajax({
+            url: '@Url.Content("~/JsonResult/get-po-details/")',
+            type: 'POST',
+            data: jsondata,
+            datatype: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.result == true) {
+                   
+                    $.each(data.podtl, function (idx, obj) {
+                        $('#customer').val(data.customercode);
+                        $('#tbl_item').append('<tr><td><INPUT type="checkbox" name="chk"/></td><td>' + obj.qty + '</td><td>' + obj.make + ' </td><td>' + obj.model + ' </td><td>' + obj.vin_engine + ' </td><td>' + obj.baseprice + '</td><td> ' + obj.actulalamt + '</td> <td>' + obj.sellingprice + '</td><td>' + obj.convertedamt + '</td><td>' + obj.profit + '</td></tr>');
+                        set_total();
+                    })
+                }
+                else {
+                    alert(data.err.toString());
+                }
+                
+            },
+            error: function (request, status, err) {
+                alert(status);
+                alert(err);
+            }
+        });
+
+        return false;
+    }
+</script>

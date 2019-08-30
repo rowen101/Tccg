@@ -1,0 +1,297 @@
+﻿@model PagedList.IPagedList<tccgv2.Models.PaymentList>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "payment-transaction";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="lead">payment-transaction</p>
+<p>
+    <a href="#" data-toggle="modal" data-target="#myModal" onclick="get_customer();">Create New Payment</a>
+ 
+</p>
+<div class="text-right">
+    <div class="input-append">
+        <input class="span2" id="appendedInputButtons" type="text">
+        <button class="btn" type="button">Search</button>
+    </div>
+</div>
+<table class="table table-hover table-condensed">
+    <tr>
+        <th></th>
+         <th>Payment #</th>
+         <th>Payment Date</th>
+        <th>Invoice #</th>
+        <th>Customer</th>
+         <th>Amount Paid</th>
+        <th>Balance</th>
+    </tr>
+
+    @foreach (var item in Model)
+    { 
+        <tr>
+            <td><a href="#" onclick="Del('@item._PAY_NUM')">Delete</a></td>
+            <td>@Html.DisplayFor(mod=>item._PAY_NUM)</td>
+             <td>@Html.DisplayFor(mod=>item._PAY_DTE)</td>
+             <td>@Html.DisplayFor(mod=>item._INVOICE_NUM)</td>
+            <td> @Html.DisplayFor(mod=>item._CUSTOMER_NAME)</td>
+             <td>@Html.DisplayFor(mod=>item._AMT_PAID)</td>
+             <td>@Html.DisplayFor(mod=>item._PAY_BALANCE)</td>
+        </tr>
+    }
+</table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, p => Url.Action("payment-transaction", new { p }))
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Payment Form</h4>
+            </div>
+            <div class="modal-body">
+             <table>
+                 <tr>
+                     <td>Payment #:</td>
+                     <td><input type="text" id="txtpayid" readonly="readonly" value="[SYSTEM GENERATED]" /></td>
+                 </tr>
+                 <tr>
+                     <td>Payment Date:</td>
+                     <td><input type="text" id="txtpaydte" value="@DateTime.Now.ToShortDateString()" /></td>
+                 </tr>
+                 <tr>
+                     <td>Customer:</td>
+                     <td><select id="drpcustomer"></select></td>
+                 </tr>
+                  <tr>
+                     <td>Invoice #:</td>
+                     <td><select id="drpInvoice"></select></td>
+                 </tr>
+                  <tr>
+                     <td>Payable Amount:</td>
+                     <td><input type="number" readonly="readonly" id="txtpayable" /></td>
+                 </tr>
+                 <tr>
+                     <td>Amount Paid</td>
+                     <td><input type="number" id="txtamtpaid" onkeydown="compute(this)" onkeyup="compute(this)" /></td>
+                 </tr>
+                 <tr>
+                     <td>Balance</td>
+                     <td><input type="number" readonly="readonly" id="txtbal" /></td>
+                 </tr>
+             </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-additem" onclick="Save();" class="btn btn-primary" data-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function isNumber(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+
+    function get_customer()
+    {
+        try{
+            $('#drpcustomer').empty();
+            $.ajax({
+                url: '@Url.Content("~/JsonResult/get-customer-open/")',
+            type: 'POST',
+            data: null,
+            datatype: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.result == true) {
+
+                    $.each(data.customer, function (idx, obj) {
+
+                        $('#drpcustomer').append('<option value=' + obj.valuemember + '>' + obj.displayvalue + '</option>');
+
+                    });
+               
+                }
+                else {
+                    alert(data.err.toString());
+                }
+
+            },
+            error: function (request, status, err) {
+                alert(status);
+                alert(err);
+            }
+        });
+        }
+        catch (err)
+        {
+            alert(err.message);
+        }
+    }
+
+    function compute(param)
+    {
+        var amtpaid = param.value;
+        var totalpayable = $('#txtpayable').val();
+
+        $('#txtbal').val(parseFloat(totalpayable) - parseFloat(amtpaid) );
+    }
+   
+
+    $('#drpcustomer').change(function () {
+        var customer = this.value;
+        var jsonData = JSON.stringify({ customer: customer }, null, 2);
+      
+        $('#drpInvoice').empty();
+        $.ajax({
+            url: '@Url.Content("~/JsonResult/get-invoice/")',
+                type: 'POST',
+                data: jsonData,
+                datatype: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.result == true) {
+
+                        $.each(data.customer, function (idx, obj) {
+
+                            $('#drpInvoice').append('<option value=' + obj.valuemember + '>' + obj.displayvalue + '</option>');
+
+                        });
+                    }
+                    else {
+                        alert(data.err.toString());
+                    }
+
+                },
+                error: function (request, status, err) {
+                    alert(status);
+                    alert(err);
+                }
+            });
+    });
+
+    $('#drpInvoice').change(function () {
+        var invoicenum = this.value;
+        var jsonData = JSON.stringify({ invoicenum: invoicenum }, null, 2);
+        $.ajax({
+            url: '@Url.Content("~/JsonResult/get-invoice-dtl/")',
+            type: 'POST',
+            data: jsonData,
+            datatype: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+          
+                if (data.result == true) {
+                    $('#txtpayable').val(data.ininfo.totalpayable);
+                }
+                else {
+                  //  alert(data.err.toString());
+                }
+
+            },
+            error: function (request, status, err) {
+                alert(status);
+                alert(err);
+            }
+        });
+    });
+
+    function Save()
+    {
+        try {
+            var paynum = $('#txtpayid').val();
+            var paydte = $('#txtpaydte').val();
+            var customercde = $('#drpcustomer').val();
+            var invoicenum = $('#drpInvoice').val();
+            var amtpaid = $('#txtamtpaid').val();
+            var bal = $('#txtbal').val();
+
+            if (!isNumber(amtpaid))
+            {
+                alert('Please enter number!');
+                $('#txtamtpaid').val('');
+                return
+            }
+            
+
+            var jsonData = JSON.stringify({
+                _PAY_NUM: paynum,
+                _PAY_DTE:paydte,
+                _INVOICE_NUM:invoicenum,
+                _CUSTOMER_NAME:customercde,
+                _AMT_PAID:amtpaid,
+                _PAY_BALANCE:bal
+            }, null, 2);
+            alert(jsonData);
+            $.ajax({
+                url: '@Url.Content("~/JsonResult/save-payment/")',
+            type: 'POST',
+            data: jsonData,
+            datatype: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+          
+                if (data.result == true) {
+                    alert('Payment Save Complete');
+                }
+                else {
+                      alert(data.err.toString());
+                }
+
+            },
+            error: function (request, status, err) {
+                alert(status);
+                alert(err);
+            }
+        });
+   
+        }
+        catch (err)
+        {
+            alert(err.message);
+        }
+    }
+
+    function Del(param) {
+        try {
+
+            var jsonData = JSON.stringify({ paynum: param }, null, 2);
+            $.ajax({
+                url: '@Url.Content("~/JsonResult/del-payment/")',
+                type: 'POST',
+                data: jsonData,
+                datatype: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+
+                    if (data.result == true) {
+                        if (data.isresult == true) {
+                            alert('Delete Complete');
+                        }
+                        else {
+                            alert('Invalid to Delete the ref. Invoice is already POST');
+                        }
+                    }
+                    else {
+                         alert(data.err.toString());
+                    }
+
+                },
+                error: function (request, status, err) {
+                    alert(status);
+                    alert(err);
+                }
+            });
+        }
+        catch (err) {
+            alert(err.message);
+        }
+    }
+
+</script>

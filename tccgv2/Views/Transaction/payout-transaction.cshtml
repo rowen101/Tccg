@@ -1,0 +1,50 @@
+﻿@model IEnumerable<tccgv2.Models.partedlist>
+@{
+    ViewBag.Title = "payout-transaction";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="lead">Payout Transaction List</p>
+    <div class="row">
+    <div class="span4">
+        <p><strong>PO list</strong></p>
+        <table class="table table-hover table-condensed">
+            <tr>
+                <th>PO #</th>
+                <th>Total Profit</th>
+            </tr>
+            @foreach (var item in Model)
+            { 
+                <tr id="@item.ponum" onclick="getpo('@item.ponum')">
+                    <td>@Html.DisplayFor(mod=>item.ponum)</td>
+                    <td>@Html.DisplayFor(mod=>item.total_profit)</td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="span8">
+        <p><strong>Parted Person List</strong></p>
+        <table>
+            <tr>
+                <th></th>
+                <th>Person Name</th>
+                <th>Total Rate(%)</th>
+            </tr>
+        </table>
+    </div>
+    </div>
+
+<script>
+    var previd='';
+
+    function getpo(param) {
+
+        $('#' + previd).removeAttr('style');
+        $('#' + previd).removeAttr('class');
+
+        $('#' + param).attr('style', 'font-weight:bold;');
+        $('#' + param).attr('class', 'warning');
+        previd = param;
+    }
+
+</script>

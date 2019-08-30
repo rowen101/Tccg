@@ -1,0 +1,137 @@
+﻿@model tccgv2.Models.TccgLogin
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login to Admin">
+    <meta name="author" content="FSC IT">
+
+    <!-- Le styles -->
+    <link href="@Url.Content("~/assets/css/bootstrap.css")" rel="stylesheet">
+    <style type="text/css">
+        body
+        {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+           background-image:url('');
+        }
+
+        .form-signin
+        {
+            max-width: 300px;
+            padding: 19px 29px 29px;
+            margin: 0 auto 20px;
+            background-color: #fff;
+            border: 1px solid #e5e5e5;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+        }
+
+            .form-signin .form-signin-heading,
+            .form-signin .checkbox
+            {
+                margin-bottom: 10px;
+            }
+
+            .form-signin input[type="text"],
+            .form-signin input[type="password"]
+            {
+                font-size: 16px;
+                height: auto;
+                margin-bottom: 15px;
+                padding: 7px 9px;
+            }
+    </style>
+    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+</head>
+
+<body>
+
+    <div class="container">
+        @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "form-signin" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @ViewBag.error 
+            <h2 class="form-signin-heading">Please sign in</h2>
+
+            @Html.TextBoxFor(m => m.uname, new { @class = "input-block-level", placeholder = "Username" })
+            @Html.PasswordFor(m => m.upass, new { @class = "input-block-level", placeholder = "Password" })
+            <label class="checkbox">
+                @Html.CheckBoxFor(m => m.RememberMe) Remember me
+            </label>
+            <p class="text-center">
+                <button class="btn btn-large btn-primary" type="button" id="btnlogin">Sign in</button></p>
+            <hr />
+            <p>  @Html.ActionLink("Forgot Password", "Index", null, new { @class = "btn btn-small btn-warning" })</p>
+            
+            
+        }
+
+    </div>
+    <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    @Scripts.Render("~/bundles/bootstrapjs")
+
+
+    <script>
+        $('#btnlogin').click(function () {
+            var uname = $('#uname').val();
+            var upass = $('#upass').val();
+            var RememberMe = document.getElementById('RememberMe').checked;
+            
+            var jsonData = JSON.stringify({ uname: uname, upass: upass, RememberMe: RememberMe }, null, 2);
+            $.ajax({
+                url: '@Url.Content("~/JsonResult/login/")',
+                 type: 'POST',
+                 data: jsonData,
+                 datatype: 'json',
+                 contentType: 'application/json; charset=utf-8',
+                 success: function (data) {
+                     if (data.result == true) {
+                         if (data.isresult == true) {
+                             window.location.replace('@Url.Content("~/Home/")');
+                         }
+                         else {
+                             alert(data.msg);
+                         }
+                      
+                     }
+                     else {
+                         alert(data.err.toString());
+                     }
+
+                 },
+                 error: function (request, status, err) {
+                     alert(status);
+                     alert(err);
+                 }
+             });
+
+        });
+    </script>
+</body>
+</html>
+

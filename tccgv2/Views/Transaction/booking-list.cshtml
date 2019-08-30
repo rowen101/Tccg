@@ -1,0 +1,50 @@
+﻿@model PagedList.IPagedList<tccgv2.Models.bookinglist>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Booking-list";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="lead">Booking List</p>
+
+<p>
+    @Html.ActionLink("New Booking", "new-booking")
+</p>
+
+<div class="text-right">
+    <div class="input-append">
+        @using (Html.BeginForm("booking-list", "Transaction", FormMethod.Get))
+        {
+            @Html.TextBox("s", ViewBag.CurrentFilter as string, new { @class = "span2" }) 
+            <button class="btn" type="submit">Search</button>
+        }
+    </div>
+</div>
+
+<table class="table table-hover table-condensed">
+    <tr>
+        <th></th>
+        <th>Booking #</th>
+        <th>Invoice #</th>
+        <th>Bill Landing #</th>
+        <th>VESSEL / VOYAGE</th>
+        <th>PORT OF LOADING</th>
+        <th>PORT OF DESCHARGE</th>
+    </tr>
+    @foreach (var item in Model)
+    { 
+        <tr>
+            <td>@Html.ActionLink("Modify", "modify-booking", new {  bk=item.bookingnum,invoice= item.invoicenum})</td>
+            <td>@Html.DisplayFor(mod => item.bookingnum)</td>
+            <td>@Html.DisplayFor(mod => item.invoicenum)</td>
+            <td>@Html.DisplayFor(mod => item.bill_landing)</td>
+            <td>@Html.DisplayFor(mod => item.vessel)</td>
+            <td>@Html.DisplayFor(mod => item.port_landing)</td>
+            <td>@Html.DisplayFor(mod => item.port_descharge)</td>
+        </tr>
+    }
+</table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, p => Url.Action("booking-list",
+    new { p, systemid = ViewBag.currentsystem, sc = ViewBag.CurrentFilter }))

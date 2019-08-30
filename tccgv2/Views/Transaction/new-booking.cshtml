@@ -1,0 +1,157 @@
+﻿@model tccgv2.Models.bbooking_setup
+
+@{
+    ViewBag.Title = "TCCG | New-Booking";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+} 
+
+<style>
+    /* styles for validation helpers */
+.field-validation-error {
+    color: #e80c4d;
+    font-weight: bold;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #e80c4d;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #e80c4d;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+/* info and errors */
+.message-info {
+    border: 1px solid;
+    clear: both;
+    padding: 10px 20px;
+}
+
+.message-error {
+    clear: both;
+    color: #e80c4d;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 20px 0 10px 0;
+}
+
+.message-success {
+    color: #7ac0da;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin: 20px 0 10px 0;
+}
+
+.error {
+    color: #e80c4d;
+}
+
+</style>
+<p class="lead">New Booking</p>
+
+@if (ViewBag.issave == true)
+{ 
+    <div class="alert fade in">
+
+<strong>Save Complete</strong>
+
+</div>
+}
+
+@using (Html.BeginForm("new-booking", "Transaction", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend></legend>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.booking_num)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.booking_num)
+            @Html.ValidationMessageFor(model => model.booking_num)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.invoice_num)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.invoice_num)
+            @Html.ValidationMessageFor(model => model.invoice_num)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.bill_landing)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.bill_landing)
+            @Html.ValidationMessageFor(model => model.bill_landing)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.shipper)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.shipper)
+            @Html.ValidationMessageFor(model => model.shipper)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.consignee)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.consignee)
+            @Html.ValidationMessageFor(model => model.consignee)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.vessel)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.vessel)
+            @Html.ValidationMessageFor(model => model.vessel)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.port_landing)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.port_landing)
+            @Html.ValidationMessageFor(model => model.port_landing)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.port_descharge)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.port_descharge)
+            @Html.ValidationMessageFor(model => model.port_descharge)
+        </div>
+
+        <p class="text-left">
+             <input type="submit" class="btn btn-primary" value="Create" />   @Html.ActionLink("Back to List", "booking-list")
+        </p>
+    </fieldset>
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

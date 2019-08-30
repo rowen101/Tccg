@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="@Url.Content("~/assets/css/bootstrap.css")" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+    <link href="@Url.Content("~/assets/css/bootstrap-responsive.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/PagedList.css")" rel="stylesheet">
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+
+    @Scripts.Render("~/bundles/jquery")
+    <style>
+        .dropdown-backdrop {
+            position: static;
+        }
+       
+    body {
+        
+        background:url('@Url.Content("~/Images/truckbg.jpg")') top right no-repeat;
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        }
+
+        .con{
+        background:url('@Url.Content("~/Images/bg.png")') repeat;
+        color:#FFFFFF;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href="#">TCCG</a>
+                <div id="mnulst">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container con">
+
+
+        @RenderBody()
+ <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12" style="text-align:center;">
+                    <p>Copyright &copy; Your Website 2014</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- /container -->
+
+    <script>
+        function isdata(data) {
+            if (data.toString() == "NotLogin") {
+                window.location.replace('@Url.Content("~/Home/Login/")');
+            }
+            else {
+                $("#mnulst").replaceWith(data);
+            }
+        }
+
+        $(this).load(function () {
+
+
+            $('#loadingmenu').fadeIn();
+            $.ajax({
+                url: '@Url.Content("~/Home/MenuList/")',
+                type: 'POST',
+                data: null,
+                datatype: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    // $('#mnulst').replaceWith(data);
+                    $('#loadingmenu').hide();
+                    isdata(data);
+                },
+                error: function (request, status, err) {
+                    alert(status);
+                    alert(err);
+                }
+            });
+
+
+
+            return false;
+
+
+        });
+
+
+    </script>
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    @Scripts.Render("~/bundles/bootstrapjs")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @RenderSection("scripts", required: false)
+
+
+</body>
+</html>
+

@@ -1,0 +1,75 @@
+﻿@model PagedList.IPagedList<tccgv2.Models.clsPOList>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "TCCG | Purchase Order List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="lead">PurchaseOrderList</p>
+
+<p>
+    @Html.ActionLink("Create Purchase Order", "create-po")
+</p>
+<div class="text-right">
+    <div class="input-append">
+        <input class="span2" id="appendedInputButtons" type="text">
+         <button class="btn" type="button">Search</button>
+    </div>
+</div>
+<table class="table table-hover table-condensed">
+    <tr>
+          <th></th>
+        <th>
+          PO #.
+        </th>
+        <th>
+           Date
+        </th>
+        <th>
+            Customer
+        </th>
+        <th>
+            Base Price
+        </th>
+        <th>
+            Selling Price
+        </th>
+        <th>
+           Paid Status
+        </th>
+      
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+         <td>
+            @Html.ActionLink("Edit", "modify-po", new {  id=item.pono  }) 
+        </td>
+        <td>
+            @Html.DisplayFor(mod => item.pono)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.podate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.customer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.baseprice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sellingprice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PaidStatus)
+        </td>
+       
+    </tr>
+}
+
+</table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, p => Url.Action("purchase-order-list",
+    new { p, systemid = ViewBag.currentsystem }))

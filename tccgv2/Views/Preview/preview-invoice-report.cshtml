@@ -1,0 +1,217 @@
+﻿@model tccgv2.Models.preview_invoice
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TCCG | Invoice Report</title>
+    <link type="text/css" href="@Url.Content("~/assets/css/preview.css")" media="print" rel="stylesheet" />
+    <link type="text/css" href="@Url.Content("~/assets/css/preview.css")" media="screen" rel="stylesheet" />
+</head>
+
+<body>
+
+    <div id="main">
+        <div class="sam">
+
+
+            <div class="left-box">
+                <b><span class="title">TRAILER CHASSIS CONSOLIDATED GROUP</span></b>
+            </div>
+            <div class="right-box" style="font-family: Arial 1.2em;">
+                <b>Date:</b>: April 4, 2014<br />
+              
+                @Model.invoice_num
+            </div>
+
+            <div class="box-info">
+                <p>
+                    <b>SELLER INFORMATION</b>
+                    <br />
+                    Deb Trailer Chassis Consolidated Svc.
+                    <br />
+                    Contact: Maria Debbie Ducante<br />
+                    6063 Oliva Avenue, Lakewood CA 90712<br />
+                    Address 2: Cebu, Philippines
+                    <br />
+                    Cell:  (562) 507-3324<br />
+                    Globe: 0915-244-2237<br />
+                    Email: <a href="mailto:nes@tccg.us">nes@tccg.us</a><br />
+                    Web:  www.tccg-us.com
+                    <br />
+
+                </p>
+            </div>
+            <div class="box-info">
+                <p>
+                    <b>BUYER INFORMATION</b>
+                    <br />
+                    COMBOX HAULING SERVICES 
+                    <br />
+                    Makati, Philippines 
+                    <br />
+                    Contact: Florence Tsoi
+                    <br />
+                    Cell:  0917-5660366 
+                    <br />
+                    Email:  flo_tsoi@yahoo.com  
+                    <br />
+
+
+
+                </p>
+            </div>
+
+
+            <div class="content">
+                <table border="0" cellspacing="0" cellpadding="0" align="left"
+                    width="632" style='width: 473.75pt; border-collapse: collapse; margin-left: 7.1pt; margin-right: 7.1pt'>
+                    <tr class="tr">
+                        <td width="368" class="td">
+                            <p><b>WIRING INSTRUCTIONS</b></p>
+                        </td>
+                        <td class="td">
+                            <p><b>ACCOUNT #</b></p>
+                        </td>
+                        <td class="td">
+                            <p><b>ACCT. NAME</b></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                <div style="padding: 10px">
+                                    RCBC 0437, Cebu Business Park Lot 1, Block 6, Mindanao Avenue corner Siquijor street, Cebu City, Cebu Philippines
+                                            (032) 238-6923;  (032) 233-6229
+
+                                </div>
+                            </p>
+                        </td>
+                        <td>
+                            <p>
+                                <div style="padding: 10px">
+                                    RCBC-USD# 9000070079
+                                </div>
+                            </p>
+                        </td>
+                        <td>
+                            <p>
+                                <div style="padding: 10px">
+                                    Deb Trailer Chassis Consolidated Services
+                                                0917-9110544
+
+                                </div>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+                <table border="0" cellspacing="0" cellpadding="0" align="left"
+                    width="632" style='width: 473.75pt; border-collapse: collapse; margin-left: 7.1pt; margin-right: 7.1pt'>
+                    <tr class="tr">
+                        <td class="td">
+                            <p><b>QUANTITY</b></p>
+                        </td>
+                        <td class="td">
+                            <p><b>MAKE</b></p>
+                        </td>
+                        <td class="td">
+                            <p><b>MODEL</b></p>
+                        </td>
+                        <td class="td">
+                            <p><b>VIN / ENGINESERIAL #</b></p>
+                        </td>
+                        <td class="td">
+                            <p><b>PRICE</b></p>
+                        </td>
+                    </tr>
+                    @foreach(var item in Model.invoice_dtl)
+                    {
+                    <tr>
+                        <td class="td">@Html.DisplayFor(mod=>item.qty)
+                        </td>
+                        <td class="td">@Html.DisplayFor(mod=>item.make)
+                        </td>
+                        <td class="td">@Html.DisplayFor(mod=>item.model)
+                        </td>
+                        <td class="td">@Html.DisplayFor(mod=>item.vin)
+
+                        </td>
+                        <td class="td">$@Html.DisplayFor(mod=>item.price)
+                        </td>
+                    </tr>
+                    }
+                    @*<tr class="trslc">
+                        <td class="td">1
+                        </td>
+                        <td class="td">2000 International w/Detroit 12.7 series 60
+                        </td>
+                        <td class="td">9200i
+                        </td>
+                        <td class="td">2HSCEAMR9YC051652
+                                                06R0556090
+
+                        </td>
+                        <td class="td">$12,500.00
+                        </td>
+                    </tr>*@
+              
+                    <tr>
+                        <td colspan="5">
+                            <b>
+                                <div style="padding: 10px; text-align: left">Buyer or Seller Inspection (Must Check One):  Waived      Performed X</div>
+                            </b>
+                        </td>
+                    </tr>
+                    <tr class="trslc">
+                        <td colspan="5">
+                            <b>
+                                <div style="text-align: left; padding: 10px;">TERMS AND CONDITIONS</div>
+                            </b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <p>
+                                <div style="padding: 10px;">
+                                    By signing this document, Buyer agrees to purchase the above equipment(s) and to wire the above amount to DEB TRAILER CHASSIS CONSOLIDATED SERVICES by 3pm CST on 5/17/13 or this contract will be considered null and void.  It is the Buyer’s responsibility to inspect all equipment prior to purchase.  Seller shall not be liable for any defects, patent, latent, or otherwise.  All equipment is priced and sold “AS IS and WHERE IS” and includes NO WARRANTIES either expressed or implied.
+                                </div>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="text-align: center; border: none;"><b>Total</b></td>
+                        <td colspan="2" style="padding: 10px;" class="trslc">$ @Html.DisplayFor(mod=>Model.total_amt)</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="5" style="border: none; padding: 10px; text-align: center">
+                            <b>Buyer’s Signature</b>:___________________________________&nbsp;<b>Date</b>:_____________
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="5" style="border: none; padding: 10px; text-align: center">
+                            <img src="images/image001.jpg" />
+                            <img src="images/image002.jpg" />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+
+        </div>
+        <div style="float: left; text-align: right; padding: 10px;" class="thank">
+
+            <i>Thank you for your business!</i>
+        </div>
+    </div>
+
+
+</body>
+</html>

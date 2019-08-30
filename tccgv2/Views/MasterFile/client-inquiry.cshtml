@@ -1,0 +1,88 @@
+﻿@model PagedList.IPagedList<tccgv2.Models.clsClientList>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "TCCG | Client Inquiry List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Client Inquiry List</h2>
+
+<p>
+    @Html.ActionLink("Add new Client", "add-new-client")
+</p>
+<div class="text-right">
+    <div class="input-append">
+        <input class="span2" id="appendedInputButtons" type="text">
+        <button class="btn" type="button">Search</button>
+    </div>
+</div>
+<table class="table table-hover table-condensed">
+    <tr>
+          <th></th>
+        <th>
+            Name
+        </th>
+        <th>
+            Address
+        </th>
+        <th>
+           Tel #
+        <th>
+            Fax #
+        </th>
+        <th>
+          Mobile
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            IsCustomer
+        </th>
+        <th>
+           Inquiry Date
+        </th>
+      
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+         <td>
+
+            @Html.ActionLink("Edit", "edit-client", new {id=item.client_id }) |
+            @Html.ActionLink("Remove", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fax)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mobile)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelITem => item.iscustomer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.inquirydate)
+        </td>
+       
+    </tr>
+}
+
+</table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("client-inquiry",
+    new { page, systemid = ViewBag.currentsystem }))

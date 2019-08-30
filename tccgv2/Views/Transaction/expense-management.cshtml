@@ -1,0 +1,33 @@
+﻿@model PagedList.IPagedList<tccgv2.Models.clsExpense>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "expense-management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="lead">Expense List</p>
+
+<p>
+    @Html.ActionLink("Create Expense", "create-expense")
+</p>
+
+<table class="table table-hover table-condensed">
+    <tr>
+        <th></th>
+        <th>Invoice #</th>
+        <th>Expense Amount</th>
+    </tr>
+
+    @foreach (var item in Model)
+    { 
+        <tr>
+            <td>@Html.ActionLink("Edit", "modify-expense", new { invoice = item.invoicenum }) | <a href="#">Delete</a></td>
+            <td>@Html.DisplayFor(mod=>item.invoicenum)</td>
+            <td>@Html.DisplayFor(mod=>item.expenseamt)</td>
+        </tr>
+    }
+</table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, p => Url.Action("expense-management",
+    new { p, systemid = ViewBag.currentsystem }))

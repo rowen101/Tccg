@@ -1,0 +1,587 @@
+﻿@model tccgv2.Models.clsInvoiceSetup
+@{
+    ViewBag.Title = "TCCG | Modify Invoice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="lead">Modify Invoice</p>
+<form class="form-horizontal">
+    <div class="span5">
+        <div class="control-group">
+            @Html.LabelFor(model => model.Invoice_num, new { @class = "control-label"})
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Invoice_num, new { @readonly = "readonly"})
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.InvoiceDte, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.InvoiceDte)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.customerlist, new { @class = "control-label" })
+            <div class="controls">
+                 @Html.DropDownList("customer", new SelectList(Model.customerlist, "valuemember", "displayvalue"), new { @class = "txtdropdown" })
+            </div>
+        </div>
+    </div>
+    <div class="span4">
+         <div class="control-group">
+            @Html.LabelFor(model => model.Ship, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Ship)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Via, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Via)
+            </div>
+        </div>
+    </div>
+    <div class="span10">
+     <p>
+            <input type="button" value=" + Add Item" class="btn btn-primary" onclick="get_ponum();" data-toggle="modal" data-target="#myModal" />
+            <input type="button" value="Delete" class="btn btn-danger" onclick="deleteRow('tbl_item');" />
+        </p>
+    </div>
+    <div class="span12">
+        <table class="table table-hover table-condensed" id="tbl_item">
+        <tr>
+            <th></th>
+            <th>Ref PO</th>
+            <th>Quantity</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Vin / Engine Serial </th>
+            <th>Price</th>
+            <th>Running total</th>
+        </tr>
+    </table>
+        <hr />
+        <p class="text-right">Total Amount:<span id="lbltotal">0</span></p>
+        </div>
+</form>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Add Item</h4>
+            </div>
+            <div class="modal-body">
+               <select id="ponum" class="txtdropdown" name="ponum"></select>
+                <table class="table table-condensed" id="itemlist">
+                    <tr>
+                        <th></th>
+                        <th>Quantity</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Vin / Engine #</th>
+                        <th>Price</th>
+                        <th>Amount</th>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-additem" onclick="additem();" class="btn btn-primary" data-dismiss="modal">Add</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="span12">
+    <p class="text-center">
+        <input type="button" class="btn btn-primary" onclick="save();" value="Save" />
+        @Html.ActionLink("Back to List", "invoice-transaction")
+    </p>
+</div>
+<script>
+
+    $('#customer').val('@ViewBag.customercode');
+    this.get_details('@Model.Invoice_num');
+
+    function get_details(invoicenum)
+    {
+        try {
+            var jsonData = JSON.stringify({ id: invoicenum }, null, 2);
+
+            $.ajax({
+                url: '@Url.Content("~/JsonResult/get-invoice-details/")',
+            type: 'POST',
+            data: jsonData,
+            datatype: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.result == true) {
+
+                    $.each(data.dtl, function (idx, obj) {
+
+                        $('#tbl_item').append('<tr><td><INPUT type="checkbox" name="chk"/></td><td>' + obj.refpo + '</td><td>' + obj.qty + ' </td><td>' + obj.make + ' </td><td>' + obj.model + ' </td><td>' + obj.vin + ' </td><td>' + obj.price + '</td><td> ' + obj.runingtot + '</td><td style="display:none;">' + obj.itmcode + '</td></tr>');
+
+                    })
+
+
+                    set_total();
+                }
+                else {
+                    alert(data.err.toString());
+                }
+
+            },
+            error: function (request, status, err) {
+                alert(status);
+                alert(err);
+            }
+        });
+
+        }
+        catch (err)
+        {
+            alert(err.message);
+        }
+
+    }
+
+        function set_total() {
+            try{
+                var istd = false;
+                var newamt = 0;
+                var total_converted = 0;
+                $('#tbl_item tr').each(function () {
+                    var col = 0;
+                    if (istd == true) {
+                        var col = 0;
+                        $(this).find('td').each(function () {
+                            //do your stuff, you can use $(this) to get current cell
+                            switch (col) {
+                                case 7:
+                                    newamt = $(this).text().replace(',', '');
+                                    total_converted += parseFloat(newamt);
+                                    break;
+
+                            }
+                            col += 1;
+
+                        })
+                    }
+                    istd = true;
+                });
+
+
+                $('#lbltotal').text(numberWithCommas(total_converted));
+            }
+            catch (err)
+            {
+                alert(err.message);
+            }
+        }
+
+        function numberWithCommas(x) {
+            var parts = x.toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.join(".");
+        }
+
+        function get_ponum() {
+
+
+            var jsondata = JSON.stringify({ custcode: $('#customer').val() }, null, 2);
+            $('#ponum').empty();
+            $.ajax({
+                url: '@Url.Content("~/JsonResult/get-po-num-open/")',
+                type: 'POST',
+                data: jsondata,
+                datatype: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.result == true) {
+
+                        $.each(data.ponumlist, function (idx, obj) {
+                     
+                            $('#ponum').append('<option value=' + obj.valuemember + '>' + obj.displayvalue + '</option>');
+                       
+                        })
+
+
+                        get_item_itemlist();
+                    }
+                    else {
+                        alert(data.err.toString());
+                    }
+
+                },
+                error: function (request, status, err) {
+                    alert(status);
+                    alert(err);
+                }
+            });
+
+            return false;
+        }
+
+        function get_item_itemlist()
+        {
+            try{
+                var ponum = $('#ponum').val();
+
+                var jsondata = JSON.stringify({ ponum: ponum }, null, 2);
+                $('#itemlist').empty();
+                $('#itemlist').append('<tr><th></th><th>Quantity</th><th>Make</th><th>Model</th><th>Vin / Engine #</th><th>Price</th><th>Amount</th><th style="display:none;"></th></tr>');
+                $.ajax({
+                    url: '@Url.Content("~/JsonResult/get-po-details-list/")',
+                    type: 'POST',
+                    data: jsondata,
+                    datatype: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+
+                        if (data.result == true) {
+
+                            $.each(data.poitem, function (idx, obj) {
+                                $('#itemlist').append('<tr><td><INPUT type="checkbox" name="chkitem"/></td><td>' + numberWithCommas(obj.qty) + '</td><td>' + obj.make + '</td><td>' + obj.model + '</td><td>' + obj.vin_engine + '</td><td>' + numberWithCommas(obj.sellingprice) + '</td><td>' + numberWithCommas(obj.convertedamt) + '</td><td style="display:none;">' + obj.itemcode + '</td></tr>');
+
+                            })
+                        }
+                        else {
+                            alert(data.err.toString());
+                        }
+
+                    },
+                    error: function (request, status, err) {
+                        alert(status);
+                        alert(err);
+                    }
+                });
+            }
+            catch (err)
+            {
+                alert(err.message);
+            }
+        }
+
+        $("#ponum").change(function () {
+            var ponum = this.value;
+       
+            var jsondata = JSON.stringify({ ponum: ponum }, null, 2);
+            $('#itemlist').empty();
+            $('#itemlist').append('<tr><th></th><th>Quantity</th><th>Make</th><th>Model</th><th>Vin / Engine #</th><th>Price</th><th>Amount</th><th style="display:none;"></th></tr>');
+            $.ajax({
+                url: '@Url.Content("~/JsonResult/get-po-details-list/")',
+                type: 'POST',
+                data: jsondata,
+                datatype: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+               
+                    if (data.result == true) {
+                    
+                        $.each(data.poitem, function (idx, obj) {
+                            $('#itemlist').append('<tr><td><INPUT type="checkbox" name="chkitem"/></td><td>' + numberWithCommas(obj.qty) + '</td><td>' + obj.make + '</td><td>' + obj.model + '</td><td>' + obj.vin_engine + '</td><td>' + numberWithCommas(obj.sellingprice) + '</td><td>' + numberWithCommas(obj.convertedamt) + '</td><td style="display:none;">' + obj.itemcode + '</td></tr>');
+
+                        })
+                    }
+                    else {
+                        alert(data.err.toString());
+                    }
+
+                },
+                error: function (request, status, err) {
+                    alert(status);
+                    alert(err);
+                }
+            });
+        });
+
+        $('#btn-additem').click(function () {
+            try {
+
+                var jsonData = get_selected_item();
+           
+
+                $.each(jsonData, function (i, obj) {
+
+                    $('#tbl_item').append('<tr><td><INPUT type="checkbox" name="chk"/></td><td>' + obj.ponum + '</td><td>' + obj.qty + ' </td><td>' + obj.make + ' </td><td>' + obj.model + ' </td><td>' + obj.vin + ' </td><td>' + obj.price + '</td><td> ' + obj.amount + '</td><td style="display:none;">' + obj.itmcode + '</td></tr>');
+
+                })
+
+                set_total();
+     
+            }
+            catch (err)
+            {
+                alert("btn-additem:" + err.message);
+            }
+
+
+        });
+
+
+        function deleteRow(tableID) {
+            try {
+                var table = document.getElementById(tableID);
+                var rowCount = table.rows.length;
+
+                for (var i = 0; i < rowCount; i++) {
+                    var row = table.rows[i];
+                    var chkbox = row.cells[0].childNodes[0];
+                    if (null != chkbox && true == chkbox.checked) {
+                        table.deleteRow(i);
+                        rowCount--;
+                        i--;
+                    }
+
+
+                }
+
+           
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        function get_selected_item()
+        {
+            var myTr = [];
+            var istd = false;
+        
+            var ischek=false;
+            var qty;
+            var make;
+            var model;
+            var vin;
+            var price;
+            var amount;
+            var itmcode;
+            var ponum = $('#ponum').val();
+            try{
+                $('#itemlist tr').each(function () {
+                    var col = 0;
+                    if (istd == true) {
+                        var col = 0;
+                        $(this).find('td').each(function () {
+                            //do your stuff, you can use $(this) to get current cell
+                            switch (col) {
+                                case 0:
+                                    if ($(this).find('input:checkbox:first').is(':checked')) {
+                                        ischek = true;
+
+                                    }
+                                    else {
+                                        ischek = false;
+                                    }
+
+                              
+                                    break;
+                                case 1:
+                                    qty = $(this).text();
+                               
+                                    break;
+                                case 2:
+                                    make = $(this).text();
+                                    break;
+                                case 3:
+                                    model = $(this).text();
+                                    break;
+                                case 4:
+                                    vin = $(this).text();
+                                    break;
+                                case 5:
+                                    price = $(this).text();
+                                    break;
+                                case 6:
+                                    amount = $(this).text();
+                                    break;
+                                case 7:
+                                    itmcode = $(this).text();
+                                    break;
+
+                            }
+                            col += 1;
+
+                        })
+
+                        if (ischek == true) {
+                            myTr.push({
+                                ponum:ponum,
+                                qty: qty,
+                                itmcode:itmcode,
+                                make: make,
+                                model: model,
+                                vin: vin,
+                                price: price,
+                                amount: amount
+
+                            });
+                        }
+                    
+                    }
+
+                    istd = true;
+                });
+
+
+           
+                return myTr;
+            }
+            catch (err)
+            {
+                alert("get_selected_item:" + err.message);
+            }
+        }
+
+        function get_modifyitem(invoicenum)
+        {
+            try{
+                $.ajax({
+                    url: '@Url.Content("~/JsonResult/get-po-details-list/")',
+                    type: 'POST',
+                    data: jsondata,
+                    datatype: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+
+                        if (data.result == true) {
+
+                            $.each(data.poitem, function (idx, obj) {
+                                $('#itemlist').append('<tr><td><INPUT type="checkbox" name="chkitem"/></td><td>' + numberWithCommas(obj.qty) + '</td><td>' + obj.make + '</td><td>' + obj.model + '</td><td>' + obj.vin_engine + '</td><td>' + numberWithCommas(obj.sellingprice) + '</td><td>' + numberWithCommas(obj.convertedamt) + '</td><td style="display:none;">' + obj.itemcode + '</td></tr>');
+
+                            })
+                        }
+                        else {
+                            alert(data.err.toString());
+                        }
+
+                    },
+                    error: function (request, status, err) {
+                        alert(status);
+                        alert(err);
+                    }
+                });
+            }
+            catch (err)
+            {
+                alert(err.message);
+            }
+
+        }
+
+        function get_itemsave()
+        {
+            var myTr = [];
+            var istd = false;
+
+            var ischek = false;
+            var qty;
+            var make;
+            var model;
+            var vin;
+            var price;
+            var amount;
+            var itmcode;
+            var ponum;
+            try {
+                $('#tbl_item tr').each(function () {
+                    var col = 0;
+                    if (istd == true) {
+                        var col = 0;
+                        $(this).find('td').each(function () {
+                            //do your stuff, you can use $(this) to get current cell
+                            switch (col) {
+                                case 1:
+                                    ponum = $(this).text();
+                                    break;
+                                case 2:
+                                    qty = $(this).text().replace(',','');              
+                                    break;
+                                case 6:
+                                    price = $(this).text().replace(',', '');
+                                    break;
+                                case 7:
+                                    amount = $(this).text().replace(',', '');
+                                    break;
+                                case 8:
+                                    itmcode = $(this).text();
+                                    break;
+
+
+                            }
+                            col += 1;
+
+                        })
+
+                    
+                        myTr.push({
+                            amount: amount,
+                            itmcode: itmcode,
+                            ponum: ponum,
+                            price: price,
+                            qty: qty
+                        });
+                    
+
+                    }
+
+                    istd = true;
+                });
+                return myTr;
+            }
+            catch (err) {
+                alert("get_selected_item:" + err.message);
+            }
+        }
+
+        function save()
+        {
+            try{
+        
+                var invoicenum = $('#Invoice_num').val();
+                var invoicedate = $('#InvoiceDte').val();
+                var customer_code = $('#customer').val();
+                var via=$('#Via').val();
+                var ship = $('#Ship').val();
+
+                var jsonData =JSON.stringify({
+                    Invoice_num: invoicenum,
+                    Invoice_date: invoicedate,
+                    cust_code: customer_code,
+                    Total_amt: $('#lbltotal').text().replace(',',''),
+                    ship: ship,
+                    via:via,
+                    itemdetails: get_itemsave()
+                },null,2);
+
+                $.ajax({
+                    url: '@Url.Content("~/JsonResult/save-invoice/")',
+                    type: 'POST',
+                    data: jsonData,
+                    datatype: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+
+                        if (data.result == true) {
+                            alert('save complete');
+                        }
+                        else {
+                            alert(data.err.toString());
+                        }
+
+                    },
+                    error: function (request, status, err) {
+                        alert(status);
+                        alert(err);
+                    }
+                });
+
+            }
+            catch (err)
+            {
+                alert('save:' + err.message);
+            }
+        }
+
+</script>

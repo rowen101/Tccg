@@ -1,0 +1,194 @@
+﻿@model tccgv2.Models.UserSetup
+
+@{
+    ViewBag.Title = "TCCG | Edit User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int menuindex = 0;
+}
+
+<h2>Edit User</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(false)
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span4">
+                <fieldset>
+                    <legend>UserSetup</legend>
+
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.fullname)
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.fullname)
+                        @Html.ValidationMessageFor(model => model.fullname)
+                    </div>
+
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.uname)
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.uname)
+                        @Html.ValidationMessageFor(model => model.uname)
+                    </div>
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.designation)
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.designation)
+                        @Html.ValidationMessageFor(model => model.designation)
+                    </div>
+
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.email)
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.email)
+                        @Html.ValidationMessageFor(model => model.email)
+                    </div>
+
+                </fieldset>
+            </div>
+            <div class="span8">
+                <fieldset>
+                    <legend>User Access</legend>
+                    <table class="table table-hover table-condensed table-striped" id="tbl_menu">
+                        <tr class="success">
+                            <th>
+                                 <img src="@Url.Content("~/Images/check.png")" style="width:18px; height:18px; cursor:pointer;" onclick="IsCheckAll()"/></th>
+                            <th>Access Name</th>
+                        </tr>
+                        @foreach (var item in Model.accesslst)
+                        { 
+                            <tr>
+                                  <td>@Html.CheckBoxFor(mod => item.ischeck, new { @class = "checkbox" + menuindex.ToString() }) @Html.HiddenFor(mod => item.menuid, new { @class = "menuid" + menuindex.ToString() })</td>
+                                <td>@Html.DisplayFor(mod => item.menuname)</td>
+                            </tr>
+                            
+                            menuindex += 1;
+                        }
+                    </table>
+                </fieldset>
+            </div>
+            <p class="text-center">
+                <input type="button" id="submit" class="btn btn-primary" value="Save" />
+                @Html.ActionLink("Back to List", "user-list")
+            </p>
+        </div>
+    </div>
+}
+
+<script>
+    $("#submit").click(function () {
+     
+
+        var fullname = $('#fullname').val();
+        var uname = $('#uname').val();
+        var designation = $('#designation').val();
+        var email = $('#email').val();
+
+        var param = { fullname: fullname, uname: uname, designation: designation, email: email, accesslst: GetMenuCheck() };
+        var jsonData = JSON.stringify(param, null, 2)
+        //alert(jsonData);
+        $.ajax({
+            url: '@Url.Content("~/JsonResult/edit-user/")',
+            type: 'POST',
+            data: jsonData,
+            datatype: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.result ==true) {
+                    alert('Save User Complete.');
+                }
+                else {
+                    alert(data.err);
+                }
+
+            },
+            error: function (request, status, err) {
+                alert(status);
+                alert(err);
+            }
+        });
+
+        return false;
+    });
+
+
+    function GetMenuCheck() {
+        var mytr = [];
+        var istd = false;
+        var i = 0;
+
+
+        var menuid;
+        var ispost = false;
+        $('#tbl_menu tr').each(function () {
+            var col = 0;
+            if (istd == true) {
+                var col = 0;
+                $(this).find('td').each(function () {
+
+                    //do your stuff, you can use $(this) to get current cell
+                    switch (col) {
+                        case 0:
+
+                            ispost = $('.checkbox' + i.toString()).attr("checked") ? true : false;
+
+
+                            menuid = $('.menuid' + i.toString()).val();
+                            break;
+                    }
+                    col += 1;
+
+                })
+
+
+
+                mytr.push({
+                    ischeck: ispost,
+                    menuid: menuid
+                });
+
+
+                i += 1;
+
+            }
+
+            istd = true;
+        });
+        return mytr;
+    }
+
+    function IsCheckAll() {
+        var istd = false;
+        var i = 0;
+        $('#tbl_menu tr').each(function () {
+            var col = 0;
+            if (istd == true) {
+                var col = 0;
+                $(this).find('td').each(function () {
+
+                    //do your stuff, you can use $(this) to get current cell
+                    switch (col) {
+                        case 0:
+                            $('.checkbox' + i.toString()).prop('checked', true);
+                            break;
+                    }
+                    col += 1;
+
+                });
+                i += 1;
+
+            }
+
+            istd = true;
+        });
+    }
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

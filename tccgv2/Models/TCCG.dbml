@@ -1,0 +1,498 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="tccgv2db" Class="TCCGDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=RJG;Initial Catalog=tccgv2db;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="tccgv2dbConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.TCCG_STATUS" Member="TCCG_STATUS">
+    <Type Name="TCCG_STATUS">
+      <Column Name="StatusID" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Usage" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="MenuOrder" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_USER" Member="TCCG_USERs">
+    <Type Name="TCCG_USER">
+      <Column Name="username" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="userpassword" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="userfullname" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="userdesignation" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="useremail" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="usergroup" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="userstatus" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="usercreateDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="usermodifyDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_PARENT_MENU" Member="V_PARENT_MENUs">
+    <Type Name="V_PARENT_MENU">
+      <Column Name="Username" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MenuOrder" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ParentMenuID" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="MenuText" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="MenuID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CONTROLER_NAME" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_USER" Member="V_USERs">
+    <Type Name="V_USER">
+      <Column Name="USERNAME" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="userpassword" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="FULLNAME" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DESIGNATION" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="EMAIL" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="GROUPDES" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ISACTIVE" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="usercreateDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="usermodifyDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_MENU" Member="TCCG_MENUs">
+    <Type Name="TCCG_MENU">
+      <Column Name="MenuID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MenuText" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="ParentMenuID" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="MenuOrder" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ImageName" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="CONTROLER_NAME" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="TCCG_MENU_TCCG_USER_RIGHT" Member="TCCG_USER_RIGHTs" ThisKey="MenuID" OtherKey="MenuID" Type="TCCG_USER_RIGHT" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_CLIENT" Member="TCCG_CLIENTs">
+    <Type Name="TCCG_CLIENT">
+      <Column Name="CLIENT_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CLIENT_NAME" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CLIENT_ADDRESS" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CLIENT_TEL" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CLIENT_FAX" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CLIENT_MOBILE" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CLIENT_EMAIL" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="INQUIRY_DETAILS" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="INQUIRY_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DISPOSITION" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="REMARKS" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="MODIFY_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ISCUSTOMER" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ISACTIVECUSTOMER" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_MENU" Member="V_MENUs">
+    <Type Name="V_MENU">
+      <Column Name="MenuID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MenuOrder" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ImageName" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="ParentMenuID" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="MenuText" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="CONTROLER_NAME" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_USER_RIGHTS" Member="TCCG_USER_RIGHTs">
+    <Type Name="TCCG_USER_RIGHT">
+      <Column Name="MenuID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CREA_BY" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="CREA_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="TCCG_MENU_TCCG_USER_RIGHT" Member="TCCG_MENU" ThisKey="MenuID" OtherKey="MenuID" Type="TCCG_MENU" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_CUSTOMER" Member="TCCG_CUSTOMERs">
+    <Type Name="TCCG_CUSTOMER">
+      <Column Name="CUSTOMER_CODE" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CUSTOMER_NAME" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="CUSTOMER_ADDRESS" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="CUSTOMER_TEL" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CUSTOMER_FAX" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="cust_mobile" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="cust_email" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="cust_status" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="cust_remarks" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_PO_MSTR" Member="TCCG_PO_MSTRs">
+    <Type Name="TCCG_PO_MSTR">
+      <Column Name="PO_NUM" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PO_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PO_CUSTOMER" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="TOTAL_BASE_AMT" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="TOTAL_SELLING_AMT" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="PAID_STATUS" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Association Name="TCCG_PO_MSTR_TCCG_PO_DTL" Member="TCCG_PO_DTLs" ThisKey="PO_NUM" OtherKey="PO_NUM" Type="TCCG_PO_DTL" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_PO_DTL" Member="TCCG_PO_DTLs">
+    <Type Name="TCCG_PO_DTL">
+      <Column Name="PO_NUM" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ITMCDE" Type="System.String" DbType="NVarChar(100) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="QTY" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="MAKE" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="MODEL" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="VIN_ENGINE" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="BASE_PRICE" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="SELLING_PRICE" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="BASE_AMT" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="SELLING_AMT" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="PO_STATUS" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="TCCG_PO_MSTR_TCCG_PO_DTL" Member="TCCG_PO_MSTR" ThisKey="PO_NUM" OtherKey="PO_NUM" Type="TCCG_PO_MSTR" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_PO_DETAILS" Member="V_PO_DETAILs">
+    <Type Name="V_PO_DETAIL">
+      <Column Name="PO_NUM" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="QTY" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="MAKE" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="MODEL" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="VIN_ENGINE" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="BASE_PRICE" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="SELLING_PRICE" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="BASE_AMT" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="SELLING_AMT" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="PROFIT" Type="System.Decimal" DbType="Decimal(19,8)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_PO_LIST" Member="V_PO_LISTs">
+    <Type Name="V_PO_LIST">
+      <Column Name="PO_NO" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PODATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="BASE_PRICE" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="SELLING_PRICE" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="CUSTOMER_NAME" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PO_CUSTOMER" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_INVOICE_MSTR" Member="TCCG_INVOICE_MSTRs">
+    <Type Name="TCCG_INVOICE_MSTR">
+      <Column Name="DR_num" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DR_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DR_customer" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DR_Ship" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DR_via" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DR_status" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DR_islock" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DR_Total" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="DR_paymenttotal" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="DR_POST" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="TCCG_INVOICE_MSTR_TCCG_INVOICE_DTL" Member="TCCG_INVOICE_DTLs" ThisKey="DR_num" OtherKey="DR_num" Type="TCCG_INVOICE_DTL" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_INVOICE_DTL" Member="V_INVOICE_DTLs">
+    <Type Name="V_INVOICE_DTL">
+      <Column Name="DR_num" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="item_code" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ref_po_num" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DR_quantity" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="MAKE" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="MODEL" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="VIN_ENGINE" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DR_itemSellingPrice" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="DR_total" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_INVOICE_DTL" Member="TCCG_INVOICE_DTLs">
+    <Type Name="TCCG_INVOICE_DTL">
+      <Column Name="DR_num" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="item_code" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ref_po_num" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DR_quantity" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="DR_itemSellingPrice" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="DR_total" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="DR_expense" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Association Name="TCCG_INVOICE_MSTR_TCCG_INVOICE_DTL" Member="TCCG_INVOICE_MSTR" ThisKey="DR_num" OtherKey="DR_num" Type="TCCG_INVOICE_MSTR" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_PAYMENT" Member="TCCG_PAYMENTs">
+    <Type Name="TCCG_PAYMENT">
+      <Column Name="pay_num" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="po_num" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="pay_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="amt_paid" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="balance" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="isSave" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_OPEN_CUSTOMER" Member="V_OPEN_CUSTOMERs">
+    <Type Name="V_OPEN_CUSTOMER">
+      <Column Name="CUSTOMER_CODE" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CUSTOMER_NAME" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_OPEN_INVOICE" Member="V_OPEN_INVOICEs">
+    <Type Name="V_OPEN_INVOICE">
+      <Column Name="DR_num" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DR_customer" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DR_Total" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="DR_Balance" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_PAYMENT_LIST" Member="V_PAYMENT_LISTs">
+    <Type Name="V_PAYMENT_LIST">
+      <Column Name="PAY_NUM" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PAY_DTE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="INVOICE_NUM" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CUSTOMER_NAME" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="AMT_PAID" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="PAY_BALANCE" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_EXPENSE_DTL" Member="V_EXPENSE_DTLs">
+    <Type Name="V_EXPENSE_DTL">
+      <Column Name="INVOICE_NUM" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="REC_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TRANS_DTE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TRANS_DES" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+      <Column Name="TRANS_AMT" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_INVOICE_CUSTOMER" Member="V_INVOICE_CUSTOMERs">
+    <Type Name="V_INVOICE_CUSTOMER">
+      <Column Name="DR_customer" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CUSTOMER_NAME" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_INVOICE" Member="V_INVOICEs">
+    <Type Name="V_INVOICE">
+      <Column Name="INVOICE_NUM" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="INVOICE_DTE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CUSTOMER_NAME" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="DR_Total" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="STATUS" Type="System.String" DbType="VarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="PAID_STATUS" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PAID_VALUE" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="DR_customer" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_EXPENSE" Member="V_EXPENSEs">
+    <Type Name="V_EXPENSE">
+      <Column Name="INVOICE_NUM" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CUSTOMER_CDE" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="EXPENSE_AMT" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_EXPENSE_DTL" Member="TCCG_EXPENSE_DTLs">
+    <Type Name="TCCG_EXPENSE_DTL">
+      <Column Name="INVOICE_NUM" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="REC_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TRANS_DTE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TRANS_DES" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+      <Column Name="TRANS_AMT" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_EXPENSE_MSTR" Member="TCCG_EXPENSE_MSTRs">
+    <Type Name="TCCG_EXPENSE_MSTR">
+      <Column Name="INVOICE_NUM" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CUSTOMER_CDE" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="EXPENSE_AMT" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_PACKING_LIST_DTL" Member="TCCG_PACKING_LIST_DTLs">
+    <Type Name="TCCG_PACKING_LIST_DTL">
+      <Column Name="PL_NUM" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ITEM_CDE" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="NET_WEIGTH" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_PACKING_LIST" Member="TCCG_PACKING_LISTs">
+    <Type Name="TCCG_PACKING_LIST">
+      <Column Name="PL_NUM" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PL_DTE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="INVOICE_NUM" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="GROSS_WEIGHT" Type="System.Decimal" DbType="Decimal(18,8) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_PACKING_LIST_DTL" Member="V_PACKING_LIST_DTLs">
+    <Type Name="V_PACKING_LIST_DTL">
+      <Column Name="PL_NUM" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ITEM_CDE" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="QTY" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+      <Column Name="MAKE" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="MODEL" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="VIN_ENGINE" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="NET_WEIGTH" Type="System.Decimal" DbType="Decimal(18,8)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_PACKING_LIST" Member="V_PACKING_LISTs">
+    <Type Name="V_PACKING_LIST">
+      <Column Name="PL_NUM" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PL_DTE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="INVOICE_NUM" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="GROSS_WEIGHT" Type="System.Decimal" DbType="Decimal(18,8) NOT NULL" CanBeNull="false" />
+      <Column Name="DR_customer" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DR_Ship" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DR_via" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CUSTOMER_NAME" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="CUSTOMER_ADDRESS" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="CUSTOMER_TEL" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="cust_mobile" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="cust_email" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCCG_BOOKING" Member="TCCG_BOOKINGs">
+    <Type Name="TCCG_BOOKING">
+      <Column Name="booking_num" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="invoice_num" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="bill_landing" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="shipper_exporter" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="consignee" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="vessel_voyage" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="port_landing" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="port_descharge" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_PO_PROFIT" Member="V_PO_PROFITs">
+    <Type Name="V_PO_PROFIT">
+      <Column Name="PO_NUM" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TOTAL_PROFIT" Type="System.Decimal" DbType="Decimal(38,8)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_PAYOUT_LIST" Member="V_PAYOUT_LISTs">
+    <Type Name="V_PAYOUT_LIST">
+      <Column Name="po_num" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PersonName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="parted_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Total_Rate" Type="System.Decimal" DbType="Decimal(38,8)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.IsLogin" Method="IsLogin" IsComposable="true">
+    <Parameter Name="username" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="password" Type="System.String" DbType="NVarChar(50)" />
+    <Return Type="System.Boolean" />
+  </Function>
+  <Function Name="dbo.SPROC_SAVE_USER" Method="SPROC_SAVE_USER">
+    <Parameter Name="username" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="userpassword" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="userfullname" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="userdesignation" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="useremail" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="usergroup" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="userstatus" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="usercreateDT" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="usermodifyDT" Type="System.DateTime" DbType="DateTime" />
+    <ElementType Name="SPROC_SAVE_USERResult">
+      <Column Name="RETVAL" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SPROC_SAVE_USER_RIGHTS" Method="SPROC_SAVE_USER_RIGHTS">
+    <Parameter Name="MenuID" Parameter="menuID" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="Username" Parameter="username" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="CREA_BY" Parameter="cREA_BY" Type="System.String" DbType="VarChar(20)" />
+    <ElementType Name="SPROC_SAVE_USER_RIGHTSResult">
+      <Column Name="RETVAL" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SPROC_SAVE_CLIENT" Method="SPROC_SAVE_CLIENT">
+    <Parameter Name="CLIENT_ID" Parameter="cLIENT_ID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="CLIENT_NAME" Parameter="cLIENT_NAME" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="CLIENT_ADDRESS" Parameter="cLIENT_ADDRESS" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="CLIENT_TEL" Parameter="cLIENT_TEL" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="CLIENT_FAX" Parameter="cLIENT_FAX" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="CLIENT_MOBILE" Parameter="cLIENT_MOBILE" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="CLIENT_EMAIL" Parameter="cLIENT_EMAIL" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="INQUIRY_DETAILS" Parameter="iNQUIRY_DETAILS" Type="System.String" DbType="Text" />
+    <Parameter Name="INQUIRY_DATE" Parameter="iNQUIRY_DATE" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="DISPOSITION" Parameter="dISPOSITION" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="REMARKS" Parameter="rEMARKS" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="MODIFY_DATE" Parameter="mODIFY_DATE" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="ISCUSTOMER" Parameter="iSCUSTOMER" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="ISACTIVECUSTOMER" Parameter="iSACTIVECUSTOMER" Type="System.String" DbType="VarChar(50)" />
+    <ElementType Name="SPROC_SAVE_CLIENTResult">
+      <Column Name="RETVAL" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SPROC_TCCG_PO_MSTR" Method="SPROC_TCCG_PO_MSTR">
+    <Parameter Name="PO_NUM" Parameter="pO_NUM" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="PO_DATE" Parameter="pO_DATE" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="PO_CUSTOMER" Parameter="pO_CUSTOMER" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="TOTAL_BASE_AMT" Parameter="tOTAL_BASE_AMT" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Parameter Name="TOTAL_SELLING_AMT" Parameter="tOTAL_SELLING_AMT" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Parameter Name="PAID_STATUS" Parameter="pAID_STATUS" Type="System.String" DbType="NVarChar(10)" />
+    <ElementType Name="SPROC_TCCG_PO_MSTRResult">
+      <Column Name="RETVAL" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SPROC_TCCG_PO_DTL" Method="SPROC_TCCG_PO_DTL">
+    <Parameter Name="PO_NUM" Parameter="pO_NUM" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="ITMCDE" Parameter="iTMCDE" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="QTY" Parameter="qTY" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Parameter Name="MAKE" Parameter="mAKE" Type="System.String" DbType="NVarChar(500)" />
+    <Parameter Name="MODEL" Parameter="mODEL" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="VIN_ENGINE" Parameter="vIN_ENGINE" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="BASE_PRICE" Parameter="bASE_PRICE" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Parameter Name="SELLING_PRICE" Parameter="sELLING_PRICE" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Parameter Name="BASE_AMT" Parameter="bASE_AMT" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Parameter Name="SELLING_AMT" Parameter="sELLING_AMT" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Parameter Name="PO_STATUS" Parameter="pO_STATUS" Type="System.Boolean" DbType="Bit" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.SPROC_TCCG_INVOICE_MSTR" Method="SPROC_TCCG_INVOICE_MSTR">
+    <Parameter Name="DR_num" Parameter="dR_num" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="DR_date" Parameter="dR_date" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="DR_customer" Parameter="dR_customer" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="DR_Ship" Parameter="dR_Ship" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="DR_via" Parameter="dR_via" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="DR_Total" Parameter="dR_Total" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <ElementType Name="SPROC_TCCG_INVOICE_MSTRResult">
+      <Column Name="RETVAL" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SPROC_TCCG_INVOICE_DTL" Method="SPROC_TCCG_INVOICE_DTL">
+    <Parameter Name="DR_num" Parameter="dR_num" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="item_code" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="ref_po_num" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="DR_quantity" Parameter="dR_quantity" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Parameter Name="DR_itemSellingPrice" Parameter="dR_itemSellingPrice" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Parameter Name="DR_total" Parameter="dR_total" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Parameter Name="DR_expense" Parameter="dR_expense" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <ElementType Name="SPROC_TCCG_INVOICE_DTLResult">
+      <Column Name="RETVAL" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SPROC_TCCG_PAYMENT_SAVE" Method="SPROC_TCCG_PAYMENT_SAVE">
+    <Parameter Name="PAY_NUM" Parameter="pAY_NUM" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="INVOICE_NUM" Parameter="iNVOICE_NUM" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="PAY_DTE" Parameter="pAY_DTE" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="AMT_PAID" Parameter="aMT_PAID" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Parameter Name="PAY_BALANCE" Parameter="pAY_BALANCE" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.SPROC_DELPAYMENT" Method="SPROC_DELPAYMENT">
+    <Parameter Name="PAYNUM" Parameter="pAYNUM" Type="System.String" DbType="VarChar(50)" />
+    <ElementType Name="SPROC_DELPAYMENTResult">
+      <Column Name="RETVAL" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SPROC_TCCG_EXPENSE_DTL" Method="SPROC_TCCG_EXPENSE_DTL">
+    <Parameter Name="INVOICE_NUM" Parameter="iNVOICE_NUM" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="TRANS_DTE" Parameter="tRANS_DTE" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="TRANS_DES" Parameter="tRANS_DES" Type="System.String" DbType="VarChar(1000)" />
+    <Parameter Name="TRANS_AMT" Parameter="tRANS_AMT" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.SPROC_TCCG_EXPENSE_MSTR" Method="SPROC_TCCG_EXPENSE_MSTR">
+    <Parameter Name="INVOICE_NUM" Parameter="iNVOICE_NUM" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="CUSTOMER_CDE" Parameter="cUSTOMER_CDE" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="EXPENSE_AMT" Parameter="eXPENSE_AMT" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.SPROC_SAVE_PACKINGLIST_MSTR" Method="SPROC_SAVE_PACKINGLIST_MSTR">
+    <Parameter Name="PL_NUM" Parameter="pL_NUM" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="PL_DTE" Parameter="pL_DTE" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="INVOICE_NUM" Parameter="iNVOICE_NUM" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="GROSS_WEIGHT" Parameter="gROSS_WEIGHT" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.SPROC_SAVE_PACKINGLIST_DTL" Method="SPROC_SAVE_PACKINGLIST_DTL">
+    <Parameter Name="PL_NUM" Parameter="pL_NUM" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="ITEM_CDE" Parameter="iTEM_CDE" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="NET_WEIGTH" Parameter="nET_WEIGTH" Type="System.Decimal" DbType="Decimal(18,8)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.SPROC_TCCG_BOOKING_SAVE" Method="SPROC_TCCG_BOOKING_SAVE">
+    <Parameter Name="booking_num" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="invoice_num" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="bill_landing" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="shipper_exporter" Type="System.String" DbType="VarChar(200)" />
+    <Parameter Name="consignee" Type="System.String" DbType="VarChar(200)" />
+    <Parameter Name="vessel_voyage" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="port_landing" Type="System.String" DbType="VarChar(200)" />
+    <Parameter Name="port_descharge" Type="System.String" DbType="VarChar(200)" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>
